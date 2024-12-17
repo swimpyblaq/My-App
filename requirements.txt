@@ -1,0 +1,7 @@
+- name: Check for requirements.txt
+  run: |
+    if [ ! -f requirements.txt ]; then
+      echo "requirements.txt not found. Skipping dependency installation."
+    else
+      pip install -r requirements.txt
+    fi
