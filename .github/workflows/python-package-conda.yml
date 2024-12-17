@@ -24,13 +24,14 @@ jobs:
           else
             echo "⚠️ No requirements.txt file found. Skipping dependency installation."
           fi
+          
+          - name: Run Tests
+  run: |
+    if command -v pytest >/dev/null; then
+      echo "Running tests with pytest..."
+      pytest tests/  # Specify the directory with your tests
+    else
+      echo "❌ pytest not installed. Test step skipped."
+      exit 1
+    fi
 
-      - name: Run Tests
-        run: |
-          if command -v pytest >/dev/null; then
-            echo "Running tests with pytest..."
-            pytest
-          else
-            echo "❌ pytest not installed. Test step skipped."
-            exit 1
-          fi
