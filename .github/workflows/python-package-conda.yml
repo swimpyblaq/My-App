@@ -1,39 +1,43 @@
-
-name: CI Pipeline
+name: Build and Push Docker Image
 
 on:
   push:
-    branches: 
-      - main           # Trigger on pushes to 'main'
-      #- develop        # Trigger on pushes to 'develop'
+    branches:
+      - main
   pull_request:
-    branches: 
-      - main           # Trigger on pull requests to 'main'
-      #- feature/*      # Trigger on pull requests to any branch prefixed with 'feature/'
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    # Checkout the code from the repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      - name: Run your build steps
-        run: echo "Running on branch ${{ github.ref_name }}"
-      
-      - name: Set Image Tag
-        run: echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
+    # Set up Docker (if Docker is not already available on the runner)
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag swimpyblaq92/chima:${{ env.IMAGE_TAG }}
+    # Cache Docker layers to speed up the build process
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-docker-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
 
-      #- name: Tag the Docker image with ⁠ latest ⁠
-      #  run: docker tag mosesonwuzua/mostechimages:${{ env.IMAGE_TAG }}
+    # Build the Docker image
+    - name: Build Docker image
+      run: |
+        docker build . --file ./docker/Dockerfile --tag swimpyblaq92/chima:1734463639
+      working-directory: ./path/to/your/directory  # Replace with the correct path if needed
 
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Push Docker image to Docker Hub
-        run: |
-          docker push swimpyblaq92/chima:${{ env.IMAGE_TAG }}
-      #    docker push mosesonwuzua/mostechimages:latest
+    # Optionally, push the Docker image to a registry (like Docker Hub or GitHub Container Registry)
+    - name: Push Docker image
+      run: |
+        docker push swimpyblaq92/chima:1734463639
+      if: success()  # Only push if the build succeeds
