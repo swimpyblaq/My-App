@@ -28,8 +28,9 @@ jobs:
     - name: Build Docker image
       run: |
         docker build . --file ./docker/Dockerfile --tag swimpyblaq92/chima:1734463639
-      working-directory: ./  # Set the working directory to the root of the repository (adjust as needed)
+      working-directory: ./  # Root directory
 
     - name: Push Docker image to DockerHub
       run: |
         docker push swimpyblaq92/chima:1734463639
+
