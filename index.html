@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Habit Tracker</h1>
+
+    <!-- Add New Habit -->
+    <form action="/add" method="POST">
+        <input type="text" name="habit_name" placeholder="New Habit" required>
+        <button type="submit">Add Habit</button>
+    </form>
+
+    <!-- List of Habits -->
+    <h2>Your Habits</h2>
+    <ul>
+        {% for habit in habits %}
+            <li>
+                {{ habit[1] }} 
+                {% if habit[0] in completed %}
+                    - ✅ Done Today
+                {% else %}
+                    <form action="/complete/{{ habit[0] }}" method="POST" style="display:inline;">
+                        <button type="submit">Mark as Done</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
