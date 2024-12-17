@@ -22,3 +22,11 @@ jobs:
 
       - name: Run Tests
         run: pytest tests/  # Point to your test directory
+- name: Install Dependencies
+  run: |
+    if [ -f requirements.txt ]; then
+      pip install -r requirements.txt
+    else
+      echo "requirements.txt not found, installing pytest only."
+      pip install pytest
+    fi
