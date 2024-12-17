@@ -1,25 +1,36 @@
-name: Python CI
+name: CI Workflow
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set Up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.12"
 
       - name: Install Dependencies
         run: |
-          pip install pytest
-          pip install -r requirements.txt
+          if [[ -f requirements.txt ]]; then
+            echo "Installing dependencies from requirements.txt..."
+            pip install --upgrade pip
+            pip install -r requirements.txt
+          else
+            echo "⚠️ No requirements.txt file found. Skipping dependency installation."
+          fi
 
       - name: Run Tests
-        run: pytest tests/  # Point to your test directory
-        
+        run: |
+          if command -v pytest >/dev/null; then
+            echo "Running tests with pytest..."
+            pytest
+          else
+            echo "❌ pytest not installed. Test step skipped."
+            exit 1
+          fi
