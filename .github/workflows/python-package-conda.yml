@@ -16,14 +16,9 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
-    - name: Log in to DockerHub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Debug repository structure
+      run: |
+        ls -R
 
     - name: Verify Dockerfile Path
       run: |
@@ -35,7 +30,3 @@ jobs:
     - name: Build Docker image
       run: |
         docker build . --file ./app/docker/Dockerfile --tag swimpyblaq/chima:latest
-
-    - name: Push Docker image to DockerHub
-      run: |
-        docker push swimpyblaq/chima:latest
