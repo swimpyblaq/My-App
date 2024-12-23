@@ -27,7 +27,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build . --file ./Dockerfile --tag swimpyblaq/chima:latest  # Updated path to Dockerfile
+        docker build . --file ./Dockerfile --tag swimpyblaq/chima:latest
 
     - name: Push Docker image to DockerHub
       run: |
