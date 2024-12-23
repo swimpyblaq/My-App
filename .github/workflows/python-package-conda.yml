@@ -27,7 +27,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build . --file ./docker/Dockerfile --tag swimpyblaq92/chima:1734463639
+        docker build . --file ./app/docker/Dockerfile --tag ***/chima:1734463639
 
     - name: Push Docker image to DockerHub
       run: |
