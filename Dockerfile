@@ -16,3 +16,4 @@ RUN dotnet publish -c Release -o out
 
 # Set the entry point for the container
 ENTRYPOINT ["dotnet", "out/ProjectName.dll"]
+
