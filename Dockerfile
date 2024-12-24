@@ -1,17 +1,18 @@
-# Use an official Python runtime as a parent image
-FROM python:3.12-slim
+# Use the official .NET SDK image
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy the .csproj file and restore dependencies
+COPY src/ProjectName/*.csproj ./
+RUN dotnet restore
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the entire project
+COPY . ./
 
-# Expose port 5000 for the Flask app
-EXPOSE 5000
+# Build the project
+RUN dotnet publish -c Release -o out
 
-# Initialize the database when the container starts
-CMD ["python", "app.py"]
+# Set the entry point for the container
+ENTRYPOINT ["dotnet", "out/ProjectName.dll"]
