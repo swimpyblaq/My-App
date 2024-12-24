@@ -1,19 +1,20 @@
-# Use the official .NET SDK image
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+# Use an official Python runtime as a parent image
+FROM python:3.10-slim
 
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the .csproj file and restore dependencies
-COPY src/ProjectName/*.csproj ./
-RUN dotnet restore
+# Copy the requirements file into the container
+COPY requirements.txt .
 
-# Copy the entire project
-COPY . ./
+# Install the required dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Build the project
-RUN dotnet publish -c Release -o out
+# Copy the rest of the application code into the container
+COPY . .
 
-# Set the entry point for the container
-ENTRYPOINT ["dotnet", "out/ProjectName.dll"]
+# Expose the application port
+EXPOSE 8000
 
+# Specify the command to run the application
+CMD ["python", "app.py"]
